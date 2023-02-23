@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label>Name</label>
+    <input type="text" id="name">
+    <label>Email</label>
+    <input type="text" id="email">
+    <label>Phone Number</label>
+    <input type="tel" id="phonenumber">
+    <button id="btn" onclick="submit()">submit</button>
+    
+    <ul id="list">
+     
+    </ul>
+    </form> 
+   <script>
+   var totalList = document.getElementById("list");
+var btn = document.getElementById("btn");
+var count = 0;
+var selectedId;
+
+function submit() {
+var name = document.getElementById("name").value;
+  var email = document.getElementById("email").value;
+  var phonenumber = document.getElementById("phonenumber").value;
+ 
+  if(btn.textContent === "Update") {
+  this.Update();
+    return;
+  }
+ 
+var li = document.createElement("li");
+  li.id = count ++;
+  var nameSpan = document.createElement("span");
+  var emailSpan = document.createElement("span");
+  var phonenumberSpan = document.createElement("span");
+  var editElement = document.createElement("button");
+  var deleteElement=document.createElement('button');
+   
+ 
+  nameSpan.textContent = name;
+  emailSpan.textContent = email;
+  phonenumberSpan.textContent = phonenumber;
+  editElement.textContent = "Edit";
+  editElement.addEventListener("click",(event) => editItem(event))
+  deleteElement.textContent="Delete";
+   deleteElement.addEventListener("click",(event)=> this.deleteElement(event));
+ 
+  li.appendChild(nameSpan);
+  li.appendChild(emailSpan);
+  li.appendChild(phonenumberSpan);
+  li.appendChild(editElement);
+  li.appendChild(deleteElement);
+ 
+  totalList.appendChild(li);
+
+  document.getElementById("name").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("phonenumber").value = "";
+}
+
+function deleteElement(event){
+    var totalList = document.getElementById("list");
+    totalList.removeChild(event.target.parentElement);
+    console.log(event);
+}
+
+function editItem(event){
+  selectedId = event.target.parentElement.id;
+  var phonenumber=event.target.previousSibling.textContent;
+  var email = event.target.previousSibling.previousSibling.textContent;
+  var name = event.target.previousSibling.previousSibling.previousSibling.textContent;
+document.getElementById("name").value = name;
+  document.getElementById("email").value = email;
+  document.getElementById("phonenumber").value = phonenumber;
+  btn.textContent = "Update";
+}
+
+function Update(){
+var name = document.getElementById("name").value;
+  var email = document.getElementById("email").value;
+  var phonenumber = document.getElementById("phonenumber").value;
+  var selectedElement = document.getElementById(selectedId);
+  selectedElement.children[0].textContent = name;
+  selectedElement.children[1].textContent = email;
+  selectedElement.children[2].textContent = phonenumber;
+  document.getElementById("name").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("phonenumber").value = "";
+  btn.textContent = "submit";
+}
+   </script>
+</body>
+</html>
