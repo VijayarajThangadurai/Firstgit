@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseTracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</head>
+<body>
+    <label>Choose expenseamount:</label>
+    <input type="number" id="amount">
+    <label>Choose description:</label>
+    <input type="text" id="description">
+    <label>Choose a category:</label>
+    <select id="category">
+            <option value="fuel">fuel</option>
+            <option value="food">food</option>
+            <option value="rent">rent</option>
+            <option value="movies">movies</option>
+    </select>
+
+    <button id = "button" onclick=" submit()">Add Expense</button>
+    <ul id="list"></ul>
+</body>
+<style>
+    span{
+     padding: 2px;
+    }
+    button{
+        margin: 5px;
+    }
+
+</style>
+<script>
+    var totalList = document.getElementById('list');
+    var button = document.getElementById("button");
+    var count = 0;
+    var selectedId;
+    var existingList = JSON.parse(sessionStorage.getItem("expenseList"));
+    for(var item of existingList){
+        this.RenderList(item.amount, item.description, item.category);
+    } 
+function submit() {
+var amount = document.getElementById("amount").value;
+  var description = document.getElementById("description").value;
+  var category = document.getElementById("category").value;
+  if(button.textContent === "Update") {
+  this.Update();
+    return;
+  }
+ 
+var li = document.createElement("li");
+  li.id = count ++;
+  var amountSpan = document.createElement("span");
+  var descriptionSpan = document.createElement("span");
+  var categorySpan = document.createElement("span");
+  var editElement = document.createElement("button");
+  var deleteElement=document.createElement('button');
+   
+ 
+  amountSpan.textContent = amount;
+  descriptionSpan.textContent = description;
+  categorySpan.textContent = category;
+  editElement.textContent = "Edit Expense";
+  editElement.addEventListener("click",(event) => editItem(event))
+  deleteElement.textContent="Delete Expense";
+   deleteElement.addEventListener("click",(event)=> this.deleteElement(event));
+ 
+  li.appendChild(amountSpan);
+  li.appendChild(descriptionSpan);
+  li.appendChild(categorySpan);
+  li.appendChild(editElement);
+  li.appendChild(deleteElement);
+ 
+  totalList.appendChild(li);
+  var obj = {
+    amount: amount,
+description:description,
+category: category
+  }
+
+  existingList.push(obj);
+  this.UpdateSessiondata(existingList);
+
+
+  document.getElementById("amount").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("category").value = "";
+}
+
+function deleteElement(event){
+    var totalList = document.getElementById("list");
+    totalList.removeChild(event.target.parentElement);
+    console.log(event);
+}
+
+function editItem(event){
+  selectedId = event.target.parentElement.id;
+  var category=event.target.previousSibling.textContent;
+  var description = event.target.previousSibling.previousSibling.textContent;
+  var amount = event.target.previousSibling.previousSibling.previousSibling.textContent;
+document.getElementById("amount").value = amount;
+  document.getElementById("description").value = description;
+  document.getElementById("category").value = category;
+  button.textContent = "Update";
+}
+
+function Update(){
+var amount = document.getElementById("amount").value;
+  var description = document.getElementById("description").value;
+  var category = document.getElementById("category").value;
+  var selectedElement = document.getElementById(selectedId);
+  selectedElement.children[0].textContent = amount;
+  selectedElement.children[1].textContent = description;
+  selectedElement.children[2].textContent = category;
+  document.getElementById("amount").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("category").value = "";
+  button.textContent = "Add Expense";
+}
+
+function UpdateSessiondata(data){
+    sessionStorage.setItem("expenseList", JSON.stringify(data));
+}
+
+function RenderList(amount, description, category){
+    var li = document.createElement("li");
+  li.id = count ++;
+  var amountSpan = document.createElement("span");
+  var descriptionSpan = document.createElement("span");
+  var categorySpan = document.createElement("span");
+  var editElement = document.createElement("button");
+  var deleteElement=document.createElement('button');
+   
+ 
+  amountSpan.textContent = amount;
+  descriptionSpan.textContent = description;
+  categorySpan.textContent = category;
+  editElement.textContent = "Edit Expense";
+  editElement.addEventListener("click",(event) => editItem(event))
+  deleteElement.textContent="Delete Expense";
+   deleteElement.addEventListener("click",(event)=> this.deleteElement(event));
+ 
+  li.appendChild(amountSpan);
+  li.appendChild(descriptionSpan);
+  li.appendChild(categorySpan);
+  li.appendChild(editElement);
+  li.appendChild(deleteElement);
+ 
+  totalList.appendChild(li);
+}
+</script>
+</html>
