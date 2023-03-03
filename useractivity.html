@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+    // const promise1 = promise.resolve('Hello World');
+    // const promise2 = 10;
+    // const promise3 = new promise((resolve, reject)=>{
+    //     setTimeout(resolve,2000, 'Goodbye')
+    // });
+
+    // promise.all([promise1, promise2, promise3]).then(values=>{
+    //     console.log(values)
+    // });
+     let post = [];
+    function createPost(title) {
+    return new Promise( (resolve, reject) => {
+        setTimeout( () => {
+            post.push({
+tittle:title
+            })
+            resolve();
+        }, 3000)
+    }) 
+}
+
+
+    function updateLastUserActivityTime(){
+        return new Promise( (resolve, reject) =>{
+          setTimeout(()=>{
+         let lastPost = post[post.length-1];
+         lastPost.lastactivity = new Date();
+         resolve();
+          },1000)
+        })
+    }
+    createPost("Post1").then(()=>{
+        updateLastUserActivityTime().then(()=>{
+            createPost("Post2").then(()=>{
+        updateLastUserActivityTime().then(()=>{
+            createPost("Post3").then(()=>{
+        updateLastUserActivityTime().then(()=>{
+            createPost("Post4").then(()=>{
+        updateLastUserActivityTime().then(()=>{
+      console.log(post);
+        })
+    })
+        })
+    })
+        })
+    })
+        })
+    })
+</script>
+</body>
+</html>
