@@ -41,6 +41,18 @@
         //localStorage.setItem(obj.email,JSON.stringify(obj))
        // showUseronScreen(obj)
         }
+        window.addEventListener("DOMContentLoaded",()=>{
+            axios.get("https://crudcrud.com/api/26ed225f6ded4b58a7a651a82c7237e4/apoinmentData")
+        .then((response) => {
+            console.log(response)
+            for(var i=0; i< response.data.length; i++){
+                showUseronScreen(response.data[i])
+            }
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    })
 function showUseronScreen(obj){
     const parentElement = document.getElementById('listofitems');
     const childElement = document.createElement('li');
