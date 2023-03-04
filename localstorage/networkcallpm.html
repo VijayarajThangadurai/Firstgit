@@ -9,28 +9,37 @@
 <body>
   <form onsubmit="saveToLocalStorage(event)">
         <label> Name </label>
-        <input type = "text" name ="username" required/>
+        <input type = "text" name ="username"  id ="name"   required/>
         <label > EmailId </label>
-        <input type = "email" name = "emailId" required/>
+        <input type = "email" name = "emailId"  id ="email"   required/>
         <label> Phone Number</label>
-        <input type = "tel" name = "phonenumber" required/>
-        <button>Submit</button>
+        <input type = "tel" name = "phonenumber" id ="phonenumber"    required/>
+        <button id ="btn">Submit</button>
     </form> 
    <ul id ='listofitems'></ul>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
    <script>
+    var btn = document.getElementById("btn");
+    var selectedId ="";
     function saveToLocalStorage(event){
         event.preventDefault();
         const name = event.target.username.value;
         const email = event.target.emailId.value;
         const phonenumber = event.target.phonenumber.value;
+
+        
+  if(btn.textContent === "Update") {
+  this.Update();
+    return;
+  }
+ 
         const obj={
             name,
             email,
             phonenumber
         }
-
-        axios.post("https://crudcrud.com/api/26ed225f6ded4b58a7a651a82c7237e4/apoinmentData", obj)
+    
+        axios.post("https://crudcrud.com/api/7ebc09d1a95740d8af0ed91e0df76e07/apoinmentData", obj)
         .then((response) => {
             showUseronScreen(response.data)
             //console.log(response)
@@ -42,7 +51,7 @@
        // showUseronScreen(obj)
         }
         window.addEventListener("DOMContentLoaded",()=>{
-            axios.get("https://crudcrud.com/api/26ed225f6ded4b58a7a651a82c7237e4/apoinmentData")
+            axios.get("https://crudcrud.com/api/7ebc09d1a95740d8af0ed91e0df76e07/apoinmentData")
         .then((response) => {
             console.log(response)
             for(var i=0; i< response.data.length; i++){
@@ -59,9 +68,13 @@ function showUseronScreen(obj){
     childElement.id = obj._id;
     childElement.textContent=obj.name+'-'+obj.email+'-'+obj.phonenumber;
     const deleteElement = document.createElement('button');
+    var editElement = document.createElement("button");
     deleteElement.textContent = "delete";
     deleteElement.addEventListener("click",(event)=> this.deleteElement(event));
+    editElement.textContent = "Edit";
+  editElement.addEventListener("click",(event) => editItem(event))
     childElement.appendChild(deleteElement);
+    childElement.appendChild(editElement);
     parentElement.appendChild(childElement);
 
 }
@@ -69,12 +82,57 @@ function deleteElement(event){
     const parentElement = document.getElementById('listofitems'); 
     parentElement.removeChild(event.target.parentElement);
     console.log(event);
-            axios.delete(`https://crudcrud.com/api/26ed225f6ded4b58a7a651a82c7237e4/apoinmentData/${event.target.parentElement.id}`)
+            axios.delete(`https://crudcrud.com/api/7ebc09d1a95740d8af0ed91e0df76e07/apoinmentData/${event.target.parentElement.id}`)
         .then((response) => {
         })
         .catch((error)=>{
             console.log(error)
         })
+}
+function editItem(event){
+  selectedId = event.target.previousSibling.previousSibling.parentElement.id;
+   var array = event.target.previousSibling.previousSibling.textContent.split("-")
+  var phonenumber=array[2];
+  var email = array[1];
+  var name = array[0];
+document.getElementById("name").value = name;
+  document.getElementById("email").value = email;
+  document.getElementById("phonenumber").value = phonenumber;
+  btn.textContent = "Update";
+}
+
+function Update(){
+var name = document.getElementById("name").value;
+  var email = document.getElementById("email").value;
+  var phonenumber = document.getElementById("phonenumber").value;
+  var selectedElement = document.getElementById(selectedId);
+  selectedElement.textContent=name+'-'+email+'-'+phonenumber;
+  document.getElementById("name").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("phonenumber").value = "";
+  btn.textContent = "submit";
+
+  const obj={
+            name,
+            email,
+            phonenumber
+        }
+
+  axios.put(`https://crudcrud.com/api/7ebc09d1a95740d8af0ed91e0df76e07/apoinmentData/${selectedId}`,obj)
+        .then((response) => {
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    const deleteElement = document.createElement('button');
+    var editElement = document.createElement("button");
+    deleteElement.textContent = "delete";
+    deleteElement.addEventListener("click",(event)=> this.deleteElement(event));
+    editElement.textContent = "Edit";
+    editElement.addEventListener("click",(event) => editItem(event))
+    selectedElement.appendChild(deleteElement);
+    selectedElement.appendChild(editElement);
+
 }
 
    </script>
