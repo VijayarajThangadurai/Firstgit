@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  <form onsubmit="saveToLocalStorage(event)">
+        <label> Name </label>
+        <input type = "text" name ="username" required/>
+        <label > EmailId </label>
+        <input type = "email" name = "emailId" required/>
+        <label> Phone Number</label>
+        <input type = "tel" name = "phonenumber" required/>
+        <button>Submit</button>
+    </form> 
+   <ul id ='listofitems'></ul>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
+   <script>
+    function saveToLocalStorage(event){
+        event.preventDefault();
+        const name = event.target.username.value;
+        const email = event.target.emailId.value;
+        const phonenumber = event.target.phonenumber.value;
+        const obj={
+            name,
+            email,
+            phonenumber
+        }
+
+        axios.post("https://crudcrud.com/api/26ed225f6ded4b58a7a651a82c7237e4/apoinmentData", obj)
+        .then((response) => {
+            showUseronScreen(response.data)
+            //console.log(response)
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+        //localStorage.setItem(obj.email,JSON.stringify(obj))
+       // showUseronScreen(obj)
+        }
+function showUseronScreen(obj){
+    const parentElement = document.getElementById('listofitems');
+    const childElement = document.createElement('li');
+    childElement.textContent=obj.name+'-'+obj.email+'-'+obj.phonenumber;
+    const deleteElement = document.createElement('button');
+    deleteElement.textContent = "delete";
+    deleteElement.addEventListener("click",(event)=> this.deleteElement(event));
+    childElement.appendChild(deleteElement);
+    parentElement.appendChild(childElement);
+}
+function deleteElement(event){
+    const parentElement = document.getElementById('listofitems');
+    parentElement.removeChild(event.target.parentElement);
+    console.log(event);
+
+}
+
+   </script>
+</body>
+</html>
