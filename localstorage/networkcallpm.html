@@ -56,18 +56,25 @@
 function showUseronScreen(obj){
     const parentElement = document.getElementById('listofitems');
     const childElement = document.createElement('li');
+    childElement.id = obj._id;
     childElement.textContent=obj.name+'-'+obj.email+'-'+obj.phonenumber;
     const deleteElement = document.createElement('button');
     deleteElement.textContent = "delete";
     deleteElement.addEventListener("click",(event)=> this.deleteElement(event));
     childElement.appendChild(deleteElement);
     parentElement.appendChild(childElement);
+
 }
 function deleteElement(event){
-    const parentElement = document.getElementById('listofitems');
+    const parentElement = document.getElementById('listofitems'); 
     parentElement.removeChild(event.target.parentElement);
     console.log(event);
-
+            axios.delete(`https://crudcrud.com/api/26ed225f6ded4b58a7a651a82c7237e4/apoinmentData/${event.target.parentElement.id}`)
+        .then((response) => {
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
 }
 
    </script>
