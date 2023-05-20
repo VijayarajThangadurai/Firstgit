@@ -17,51 +17,53 @@
         <button id ="btn">Submit</button>
     </form> 
    <ul id ='listofitems'></ul>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.3.4/axios.min.js"></script>
    <script>
     var btn = document.getElementById("btn");
     var selectedId ="";
-    function saveToLocalStorage(event){
+     async function saveToLocalStorage(event){
         event.preventDefault();
         const name = event.target.username.value;
         const email = event.target.emailId.value;
         const phonenumber = event.target.phonenumber.value;
-
+//target = full form 
         
   if(btn.textContent === "Update") {
   this.Update();
     return;
   }
- 
+
         const obj={
             name,
             email,
             phonenumber
+                                     
         }
-    
-        axios.post("https://crudcrud.com/api/7ebc09d1a95740d8af0ed91e0df76e07/apoinmentData", obj)
-        .then((response) => {
-            showUseronScreen(response.data)
-            //console.log(response)
+       
+        try {
+            const response = await fetch("https://crudcrud.com/api/5529108a4517447da93c8ac1a750155d/apoinmentData",{
+            method : 'POST',
+            headers:  {'Content-Type':'application/json'},
+            body: JSON.stringify(obj)
         })
-        .catch((err) => {
-            console.log(err)
-        })
-        //localStorage.setItem(obj.email,JSON.stringify(obj))
-       // showUseronScreen(obj)
+        const jsondata = await response.json();
+        showUseronScreen(jsondata)
+        } catch(error){
+            console.log(error);
         }
-        window.addEventListener("DOMContentLoaded",()=>{
-            axios.get("https://crudcrud.com/api/7ebc09d1a95740d8af0ed91e0df76e07/apoinmentData")
-        .then((response) => {
-            console.log(response)
+    }
+        document.addEventListener("DOMContentLoaded",async ()=> {
+            try {
+            const response = await fetch("https://crudcrud.com/api/5529108a4517447da93c8ac1a750155d/apoinmentData")
+            const jsondata = await response.json();
+           
             for(var i=0; i< response.data.length; i++){
-                showUseronScreen(response.data[i])
+                showUseronScreen(jsondata[i])
             }
+        } catch(error) {
+             console.log(error);
+        }
         })
-        .catch((error)=>{
-            console.log(error)
-        })
-    })
+    
 function showUseronScreen(obj){
     const parentElement = document.getElementById('listofitems');
     const childElement = document.createElement('li');
@@ -78,16 +80,16 @@ function showUseronScreen(obj){
     parentElement.appendChild(childElement);
 
 }
-function deleteElement(event){
+async function deleteElement(event){
     const parentElement = document.getElementById('listofitems'); 
     parentElement.removeChild(event.target.parentElement);
-    console.log(event);
-            axios.delete(`https://crudcrud.com/api/7ebc09d1a95740d8af0ed91e0df76e07/apoinmentData/${event.target.parentElement.id}`)
-        .then((response) => {
-        })
-        .catch((error)=>{
+    try {
+            await fetch(`https://crudcrud.com/api/5529108a4517447da93c8ac1a750155d/apoinmentData/${event.target.parentElement.id}`,{
+                method : "DELETE"
+            })
+        } catch (error){
             console.log(error)
-        })
+        }
 }
 function editItem(event){
   selectedId = event.target.previousSibling.previousSibling.parentElement.id;
@@ -101,7 +103,7 @@ document.getElementById("name").value = name;
   btn.textContent = "Update";
 }
 
-function Update(){
+async function Update(){
 var name = document.getElementById("name").value;
   var email = document.getElementById("email").value;
   var phonenumber = document.getElementById("phonenumber").value;
@@ -117,13 +119,15 @@ var name = document.getElementById("name").value;
             email,
             phonenumber
         }
-
-  axios.put(`https://crudcrud.com/api/7ebc09d1a95740d8af0ed91e0df76e07/apoinmentData/${selectedId}`,obj)
-        .then((response) => {
-        })
-        .catch((error)=>{
-            console.log(error)
-        })
+        try { 
+            await fetch(`https://crudcrud.com/api/5529108a4517447da93c8ac1a750155d/apoinmentData/${selectedId}`,{
+           method : 'PUT',
+           headers: {'Content-Type': 'application/json'},
+           body: JSON.stringify(obj)
+         })
+        } catch(error){
+            console.log(error);
+        }
     const deleteElement = document.createElement('button');
     var editElement = document.createElement("button");
     deleteElement.textContent = "delete";
